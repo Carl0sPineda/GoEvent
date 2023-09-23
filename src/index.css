@@ -32,6 +32,11 @@ body {
   background-color: var(--color-fondo);
 }
 
+.row{
+
+  margin-right:0 !important;
+}
+
 .render {
   /* background-color: var(--color-title-letter); */
   /* height: calc(100vh - 7rem);5 */
