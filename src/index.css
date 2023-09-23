@@ -1,0 +1,133 @@
+/* 
+- Dark Slate Grey: hsl(234, 29%, 20%)
+- Charcoal Grey: hsl(235, 18%, 26%)
+- Grey: hsl(231, 7%, 60%)
+- White: hsl(0, 0%, 100%)
+*/
+
+/* FONT */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,100&display=swap');
+
+:root {
+  /* RESALTAR */
+  --color-primary: hsl(4, 100%, 67%);
+  /* FONDO Y LETRAS DE BOTONES(ACCION PRINCIPAL)*/
+  --color-fondo: hsl(0, 0%, 100%);
+  /* BOTONES ACCION PRINCIPAL O TITULOS */
+  --color-title-letter: hsl(234, 29%, 20%);
+
+  /* LETRA SECUNDARIAS */
+  --color--normal-letter: hsl(235, 18%, 26%);
+  --color-tertiary: hsl(231, 7%, 60%);
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* background-color: var(--color-fondo); */
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--color-fondo);
+}
+
+.render {
+  /* background-color: var(--color-title-letter); */
+  /* height: calc(100vh - 7rem);5 */
+  height: calc(100vh - 10.8rem);/*5*/
+  border-radius: 10px;
+}
+
+.border-radius{
+  border-radius: 10px;
+}
+
+.ct-center {
+  text-align: center;
+}
+
+.ct-color-secundary{
+  color: var(--color-fondo);
+}
+
+.color-border{
+ background-color: var(--color-fondo);
+ color: var( --color-tertiary);
+}
+  
+.span-decoration {
+  color: var(--color-tertiary);
+  font-weight: 100;
+  font-size: 1rem;
+}
+
+.span-decoration-2 {
+  color: var(--color-title-letter);
+}
+button{
+
+  border-radius: 5px;
+  /* border: 0px solid var(--color-fondo); */
+  border: none;
+  transition: transform 0.5s ease,background-color 0.3s ease, color 0.3s ease;
+  padding: .5rem;
+ 
+}
+.ct-btn-primary{
+ 
+  color: var(--color-fondo);
+  background-color: var(--color-title-letter);
+
+  box-shadow: 2px 5px 10px var(--color-title-letter);
+  box-shadow: 0px 5px 10px var(--color--normal-letter);
+  padding: .5rem 1rem .5rem .5rem;
+}
+.ct-btn-secundary{
+ 
+  color: var(--color-fondo);
+  background-color: var(--color--normal-letter);
+  color: var(--color--normal-letter);
+  background-color:#4682A9;
+  background-color:#4F709C;
+  background-color:#ADC4CE;
+  
+   box-shadow: 6px 6px 12px #c5c5c5,
+  -6px -6px 12px #ffffff; 
+   /* box-shadow: 2px 5px 10px var(--color-title-letter);
+  box-shadow: 0px 5px 10px var(--color--normal-letter);  */
+
+}
+
+button:hover{
+  color: var(--color-fondo);
+  background-color: var(--color-title-letter);
+  transform-origin: 1.5;
+  transform: scale(1.1); 
+}
+
+
+@media screen and (width <= 576px) {
+  .ct-btn-primary{
+    margin-top: 1rem;
+    padding:.5rem
+  }
+} 
+@media screen and (width <= 556px) {
+  .ct-btn-primary{
+    margin-top: 0rem;
+  }
+} 
+
+/*
+.ct-btn{
+
+  min-width: 2rem;
+
+
+}
+@media screen and (width >= 576px) {
+  .ct-btn {
+    min-width:calc(10rem) ;
+  }
+} */

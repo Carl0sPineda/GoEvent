@@ -1,0 +1,50 @@
+const Navbar = () => {
+  return (
+    <>
+      {/** NAV-BAR */}
+      <nav className="navbar navbar-expand-lg">
+        <div className="container-fluid d-flex justify-content-center">
+          {/* ICONO Y LABEL */}
+          <div className="col pb-2 pb-md-0">
+            <a className="navbar-brand" href="#">
+              <span className="span-decoration-2">Go</span>
+              <span className="span-decoration">Event</span>
+            </a>
+          </div>
+          {/* BUSCADOR */}
+          <div className="col-10 col-md-4 pe-2 ps-2">
+            <form className="d-flex" role="search">
+              <input
+                className="form-control color-border me-2 ct-center"
+                type="search"
+                placeholder="Buscar un evento"
+                aria-label="Search"
+              />
+            </form>
+          </div>
+          {/* OPCIONES */}
+          <div className="col">
+            <div className="d-flex pt-0 pt-sm-2 pt-md-0 pe-0 pe-sm-2 pe-md-0">
+              {/* pe-sm-2 */}
+              <div className="col-auto me-auto" />
+              <div className="d-flex">
+                <button
+                  type="button"
+                  className="ct-btn-primary d-flex  justify-content-center align-items-center ct-btn"
+                >
+                  <span className="material-symbols-outlined">add</span>
+                  <span className="d-none d-sm-flex d-md-flex ps-2">
+                    Agregar
+                  </span>
+                  {/*- Crear evento  */}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </>
+  );
+};
+
+export default Navbar;
