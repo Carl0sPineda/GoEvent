@@ -1,0 +1,211 @@
+/* FONT */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,100&display=swap");
+
+:root {
+  /* RESALTAR */
+  --color-primary: hsl(4, 100%, 67%);
+  /* FONDO Y LETRAS DE BOTONES(ACCION PRINCIPAL)*/
+  --color-fondo: hsl(0, 0%, 100%);
+  /* BOTONES ACCION PRINCIPAL O TITULOS */
+  --color-title-letter: hsl(234, 29%, 20%);
+
+  /* LETRA SECUNDARIAS */
+  --color--normal-letter: hsl(235, 18%, 26%);
+  --color-tertiary: hsl(231, 7%, 60%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+body {
+  background-color: var(--color-fondo);
+  font-family: "Roboto", sans-serif;
+}
+.container-principal {
+  height: 40rem;
+  width: 50rem;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+.image {
+  background-image: url("https://images.unsplash.com/photo-1603910234616-3b5f4a6be2b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80");
+
+  background-size: cover;
+  background-position: center;
+  height: calc(100%); /* Ajusta la altura según tus necesidades */
+  width: calc(100%); /* Ajusta la altura según tus necesidades */
+
+  padding: 0px;
+}
+.container-imagen {
+  padding: 0.5px;
+}
+button {
+  border-radius: 5px;
+  /* border: 0px solid var(--color-fondo); */
+  border: none;
+  transition: transform 0.5s ease, background-color 0.3s ease, color 0.3s ease;
+  padding: 0.5rem;
+}
+button:hover {
+  color: var(--color-fondo);
+  background-color: var(--color-title-letter);
+  transform-origin: 1.5;
+  transform: scale(0.9);
+}
+
+.ct-btn-primary {
+  color: var(--color-fondo);
+  background-color: var(--color-title-letter);
+}
+
+.container-formulario {
+  background-color: rgb(255, 255, 255);
+}
+
+.text-align-center {
+  text-align: center;
+}
+.circle-img {
+  position: absolute;
+  width: 10rem;
+}
+
+.circle-img-top {
+  top: 0;
+  left: 15rem;
+}
+.circle-img-rigth {
+  bottom: 0px;
+  right: 15rem;
+}
+
+
+/* Checkbox iniciar_sesion - registrarse */
+.checkbox {
+  height: 60px;
+  background-color: #d0d0d0;
+  border-radius: 20px;
+  position: relative;
+  color: black;
+  overflow: hidden;
+}
+
+#checkbox_toggle {
+  display: none;
+}
+
+.checkbox .toggle {
+  width: 7.5rem;
+  height: 50px;
+  position: absolute;
+  border-radius: 30px;
+  left: 11px;
+
+  cursor: pointer;
+  background: rgb(255, 255, 255);
+  transition: 0.4s;
+}
+
+.checkbox .slide {
+  width: 230px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+}
+
+.checkbox .slide .text {
+  font-size: 1rem;
+  font-weight: 700;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.check:checked + .checkbox .slide .toggle {
+  transform: translateX(8.5rem);
+  background: rgb(255, 255, 255);
+}
+
+/* Inputs_text */
+.inputGroup {
+  border-radius: 10px;
+  background-color: #f5f5fa;
+  color: black;
+}
+.input {
+  border: none;
+  background-color: #f5f5fa;
+}
+
+.j-icon {
+  display: flex;
+  align-items: center; /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+}
+.custom-select option {
+  display: none;
+}
+
+.custom-select option:checked + .custom-label::before {
+  content: "\2713"; /* Código Unicode para el símbolo de marca de verificación (checkmark) */
+  margin-right: 10px; /* Espacio entre la marca de verificación y el texto de la opción */
+  display: inline-block;
+  color: #007bff; /* Cambia el color del marcador cuando está seleccionado */
+}
+
+.custom-label::before {
+  content: " "; /* Deja un espacio en blanco para el marcador (check) */
+  display: inline-block;
+  width: 20px; /* Ancho del espacio del marcador */
+  text-align: center;
+  color: transparent; /* El texto es transparente para no mostrarlo */
+}
+
+.custom-label {
+  display: block;
+  margin: 5px 0;
+}
+
+.custom-select option:checked + .custom-label {
+  background-color: #f0f0f0; /* Cambia el fondo de las opciones seleccionadas */
+}
+
+@media (max-width: 576px) {
+  .container-imagen {
+    display: none;
+  }
+  .checkbox .toggle {
+    width: 10.5rem;
+    left: 0.5rem;
+  }
+  .check:checked + .checkbox .slide .toggle {
+    transform: translateX(11.5rem);
+    background: rgb(255, 255, 255);
+  }
+  .circle-img-rigth {
+    bottom: 0px;
+    right: 15rem;
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-imagen {
+    display: block;
+  }
+
+}
+
+@media (min-width: 992px) {
+ 
+  
+}
+
+@media (min-width: 1200px) {
+}
+
+@media (min-width: 1400px) {
+}

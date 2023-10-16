@@ -1,4 +1,15 @@
+import { useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
+
+  const auth= getAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(auth.currentUser);
+  }, [auth]);
   return (
     <>
       {/** NAV-BAR */}
@@ -27,7 +38,7 @@ const Navbar = () => {
             <div className="d-flex pt-0 pt-sm-2 pt-md-0 pe-0 pe-sm-2 pe-md-0">
               {/* pe-sm-2 */}
               <div className="col-auto me-auto" />
-              <div className="d-flex">
+              <div className="d-flex ">
                 <button
                   type="button"
                   className="ct-btn-primary d-flex  justify-content-center align-items-center ct-btn"
@@ -38,7 +49,19 @@ const Navbar = () => {
                   </span>
                   {/*- Crear evento  */}
                 </button>
+
+                <button
+                  type="button"
+                  className="ct-btn-primary d-flex  justify-content-center align-items-center ct-btn ms-4"
+                  onClick={() => navigate("/Profile")}
+                >
+                  <span className="d-none d-sm-flex d-md-flex ps-2">
+                    Perfil
+                  </span>
+                  {/*- Perfil  */}
+                </button>
               </div>
+              
             </div>
           </div>
         </div>
