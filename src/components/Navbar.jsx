@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-
-  const auth= getAuth();
+  const auth = getAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,7 +60,6 @@ const Navbar = () => {
                   {/*- Perfil  */}
                 </button>
               </div>
-              
             </div>
           </div>
         </div>

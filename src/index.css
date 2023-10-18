@@ -15,11 +15,11 @@
   --color-fondo: hsl(0, 0%, 100%);
   /* BOTONES ACCION PRINCIPAL O TITULOS */
   --color-title-letter: hsl(234, 29%, 20%);
-
   /* LETRA SECUNDARIAS */
   --color--normal-letter: hsl(235, 18%, 26%);
   --color-tertiary: hsl(231, 7%, 60%);
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -33,14 +33,13 @@ body {
 }
 
 .row{
-
   margin-right:0 !important;
 }
 
 .render {
   /* background-color: var(--color-title-letter); */
   /* height: calc(100vh - 7rem);5 */
-  height: calc(100vh - 10.8rem);/*5*/
+  height: calc(85vh);/*5*/
   border-radius: 10px;
 }
 
