@@ -98,7 +98,11 @@ export default function SingUp() {
     try {
       const imgUrls = await Promise.all(
         [...photo].map((image) => storeFile(image))
-      );
+      ).catch((error) => {
+        setLoading(false);
+        toast.error("Images not uploaded");
+        return;
+      });
       const auth = getAuth();
       const userCredentials = await createUserWithEmailAndPassword(
         auth,

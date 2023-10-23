@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ onProfileClick }) => {
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ const Navbar = () => {
                   {/*- Crear evento  */}
                 </button>
 
-                <button
+                {/* <button
                   type="button"
                   className="ct-btn-primary d-flex  justify-content-center align-items-center ct-btn ms-4"
                   onClick={() => navigate("/Profile")}
@@ -57,8 +57,12 @@ const Navbar = () => {
                   <span className="d-none d-sm-flex d-md-flex ps-2">
                     Perfil
                   </span>
-                  {/*- Perfil  */}
-                </button>
+                 
+                </button> */}
+               
+               <button className="ct-btn-primary ms-2" 
+               onClick={onProfileClick}>Perfil</button>
+                
               </div>
             </div>
           </div>

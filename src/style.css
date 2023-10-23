@@ -173,6 +173,25 @@ button:hover {
   background-color: #f0f0f0; /* Cambia el fondo de las opciones seleccionadas */
 }
 
+
+
+.imgP {
+  width: 90px; /* Adjust the width to control the image size */
+  height: 90px; /* Ensure the height matches the width for a round shape */
+  border-radius: 100%; /* Makes the image round */
+  
+}
+
+.modal-with-background {
+  background-image: url("https://images.unsplash.com/photo-1542289436-84a4d3ea5b8c?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
+  background-position: center center; /* Centra la imagen horizontal y verticalmente */
+}
+
+.blur-background {
+  backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según tus preferencias */
+}
+
 @media (max-width: 576px) {
   .container-imagen {
     display: none;
