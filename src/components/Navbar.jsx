@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import CreateEvents from "../pages/CreateEvents";
 
 const Navbar = ({ onProfileClick }) => {
   const auth = getAuth();
@@ -9,6 +10,17 @@ const Navbar = ({ onProfileClick }) => {
   useEffect(() => {
     console.log(auth.currentUser);
   }, [auth]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       {/** NAV-BAR */}
@@ -40,13 +52,13 @@ const Navbar = ({ onProfileClick }) => {
               <div className="d-flex ">
                 <button
                   type="button"
-                  className="ct-btn-primary d-flex  justify-content-center align-items-center ct-btn"
+                  className="ct-btn-primary d-flex agregar justify-content-center align-items-center ct-btn ms-4"
+                  onClick={openModal}
                 >
                   <span className="material-symbols-outlined">add</span>
                   <span className="d-none d-sm-flex d-md-flex ps-2">
                     Agregar
                   </span>
-                  {/*- Crear evento  */}
                 </button>
 
                 {/* <button
@@ -59,15 +71,22 @@ const Navbar = ({ onProfileClick }) => {
                   </span>
                  
                 </button> */}
-               
-               <button className="ct-btn-primary ms-2" 
-               onClick={onProfileClick}>Perfil</button>
-                
+
+                <button
+                  className="ct-btn-primary ms-2"
+                  onClick={onProfileClick}
+                >
+                  Perfil
+                </button>
               </div>
             </div>
           </div>
         </div>
       </nav>
+
+      {isModalOpen && (
+        <CreateEvents isOpen={isModalOpen} closeModal={closeModal} />
+      )}
     </>
   );
 };

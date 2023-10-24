@@ -5,7 +5,6 @@ import ProfileModal from "../components/ProfileModal";
 import { useState } from "react";
 
 export default function Home() {
-
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const handleProfileClick = () => {
@@ -17,7 +16,6 @@ export default function Home() {
   };
   return (
     <>
-          
       <Navbar onProfileClick={handleProfileClick} />
       <ProfileModal show={isProfileModalOpen} onClose={closeProfileModal} />
       <Filters />

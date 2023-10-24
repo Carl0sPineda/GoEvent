@@ -218,13 +218,64 @@ button:hover {
 
 }
 
-@media (min-width: 992px) {
- 
-  
+/* Estilos del modal evento*/
+.modal {
+  display: none;
+  overflow: hidden; /* Oculta el desbordamiento del modal */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
+  z-index: 1;
+  transition: opacity 0.3s;
 }
 
-@media (min-width: 1200px) {
+.modal.show-event {
+  display: block;
+  overflow: hidden;
 }
 
-@media (min-width: 1400px) {
+.modal-content-event {
+  position: absolute;
+  max-height: 100%; /* Ajusta la altura máxima del contenido al 100% del modal */
+  overflow-y: auto; /* Agrega barras de desplazamiento solo al contenido si es necesario */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
+
+.has-scrollbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  overflow-x: auto;
+  margin-inline: -15px;
+  padding-inline: 15px;
+  scroll-padding-left: 15px;
+  padding-bottom: 60px;
+  scroll-snap-type: inline mandatory;
+}
+
+
+#mapid{
+  height: 400px;
+  width: 100%;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px; /* Ajusta la distancia superior según tus preferencias */
+  right: 10px; /* Ajusta la distancia derecha según tus preferencias */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #000; /* Color del icono de cierre */
+  font-size: 24px;
+}
+
