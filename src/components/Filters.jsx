@@ -23,7 +23,7 @@ const Filters = () => {
             <span className="material-symbols-outlined pe-0 pe-md-2">
               sports_soccer
             </span>
-            <span className="d-none d-md-block">Partidos</span>
+            <span className="d-none d-md-block">Deportes</span>
             {/*- Crear evento  */}
           </button>
         </div>
@@ -33,9 +33,35 @@ const Filters = () => {
             className="ct-btn-secundary align-items-center d-flex"
           >
             <span className="material-symbols-outlined pe-0 pe-md-2">
-              nightlife
+              celebration
             </span>
-            <span className="d-none d-md-block">Bailes</span>
+            <span className="d-none d-md-block">Fiestas</span>
+            {/*- Crear evento  */}
+          </button>
+        </div>
+
+        <div className="col-1 col-md-1 col-lg-2 col-xl-1  d-flex  justify-content-center align-content-center align-items-center   ">
+          <button
+            type="button"
+            className="ct-btn-secundary align-items-center d-flex"
+          >
+            <span className="material-symbols-outlined pe-0 pe-md-2">
+              restaurant
+            </span>
+            <span className="d-none d-md-block">Comida</span>
+            {/*- Crear evento  */}
+          </button>
+        </div>
+
+        <div className="col-1 col-md-1 col-lg-2 col-xl-1  d-flex  justify-content-center align-content-center align-items-center   ">
+          <button
+            type="button"
+            className="ct-btn-secundary align-items-center d-flex"
+          >
+            <span className="material-symbols-outlined pe-0 pe-md-2">
+              partner_exchange
+            </span>
+            <span className="d-none d-md-block">Charla</span>
             {/*- Crear evento  */}
           </button>
         </div>
