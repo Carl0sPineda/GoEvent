@@ -146,10 +146,11 @@ export default function SingUp() {
             </div>
             {/* <!-- FORMULARIO --> */}
             <div className="row p-2">
-              <div>
-                <div className="text-center">
-                  <labael>Registrarse</labael>
-                </div>
+              <div className="row justify-content-center align-items-lg-center p-2">
+                <h3 className="text-align-center" style={{ marginTop: 5 }}>
+                  Go event
+                </h3>
+                <label className="text-align-center">Registrarse</label>
               </div>
 
               <form onSubmit={onSubmit} className="mt-2">
@@ -189,7 +190,7 @@ export default function SingUp() {
                     className="form-control"
                   />
                 </div>
-                <div class="mb-3">
+                <div className="mb-3">
                   <label>Intereses</label>
                   <select
                     className="form-select"

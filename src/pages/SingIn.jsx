@@ -47,15 +47,17 @@ export default function SingIn() {
 
   return (
     <section>
-      <div className="container-fluid vh-100 bg-white d-flex justify-content-center align-items-center">
+      <div className="container-fluid vh-100 d-flex justify-content-center align-items-center">
         <div className="container-principal row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-2">
           <div className="col container-formulario">
             {/* <!-- TITULO Y LOGO --> */}
             <div className="row justify-content-center align-items-lg-center p-2">
-              <h3 className="text-align-center mt-2">Go event</h3>
+              <h3 className="text-align-center" style={{ marginTop: 100 }}>
+                Go event
+              </h3>
             </div>
             {/* <!-- FORMULARIO --> */}
-            <div className="row p-3">
+            <div className="row">
               <div>
                 <input id="checkbox_toggle" type="checkbox" className="check" />
                 <div className="text-center">
