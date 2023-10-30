@@ -57,7 +57,6 @@ const ProfileModal = ({ show, onClose }) => {
       <div className="modal-dialog" role="document">
         <div className="modal-content modal-with-background">
           <div className="modal-header">
-            <label></label>
             <button
               type="button"
               className="close"
