@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   getStorage,
   ref,
@@ -10,7 +12,6 @@ import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
-import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet/dist/leaflet.css";
@@ -19,20 +20,21 @@ import "leaflet-control-geocoder";
 import "leaflet-fullscreen";
 
 export default function CreateEvents({ isOpen, closeModal }) {
-  const navigate = useNavigate();
   const auth = getAuth();
   const [geolocation, setGeolocation] = useState({
     lat: 10.36402678444531,
     lng: -85.3908877959475,
   });
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState([]);
   const [progress, setProgress] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
-    start_date: "",
-    end_date: "",
-    category: "",
+    start_date: new Date(),
+    end_date: new Date(),
+    category: "", // Campo para la categoría
     latitude: 0,
     longitude: 0,
     images: {},
@@ -52,8 +54,8 @@ export default function CreateEvents({ isOpen, closeModal }) {
   const resetForm = () => {
     setFormData({
       name: "",
-      start_date: "",
-      end_date: "",
+      start_date: new Date(),
+      end_date: new Date(),
       category: "",
       latitude: 0,
       longitude: 0,
@@ -107,8 +109,6 @@ export default function CreateEvents({ isOpen, closeModal }) {
       );
 
       const data = await response.json();
-      // const address = data?.display_name ?? "";
-      //   setAddress(address);
     });
 
     const geocoder = L.Control.geocoder({
@@ -135,11 +135,10 @@ export default function CreateEvents({ isOpen, closeModal }) {
 
     L.control.layers(baseLayers).addTo(map);
 
-    // Clean up function to remove the map and marker when the component unmounts
     return () => {
       map.remove();
     };
-  }, []); // Empty array to run the effect only once
+  }, []);
 
   function onChange(e) {
     let boolean = null;
@@ -150,16 +149,16 @@ export default function CreateEvents({ isOpen, closeModal }) {
     if (e.target.value === "false") {
       boolean = false;
     }
-    //files
+
     if (e.target.files) {
-      setSelectedImage(e.target.files); //Used for preview the image before upload files[0]
+      setSelectedImage(e.target.files);
 
       setFormData((prevState) => ({
         ...prevState,
         images: e.target.files,
       }));
     }
-    //text/Boolean/Number
+
     if (!e.target.files) {
       setFormData((prevState) => ({
         ...prevState,
@@ -167,18 +166,6 @@ export default function CreateEvents({ isOpen, closeModal }) {
       }));
     }
   }
-
-  function uploadMultipleFiles(e) {
-    fileObj.push(setSelectedImage(e.target.files[0]));
-    for (let i = 0; i < fileObj[0].length; i++) {
-      fileArray.push(URL.createObjectURL(fileObj[0][i]));
-    }
-  }
-
-  // This function will be triggered when the "Remove This Image" button is clicked
-  const removeSelectedImage = () => {
-    setSelectedImage();
-  };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -196,222 +183,213 @@ export default function CreateEvents({ isOpen, closeModal }) {
 
   async function onSubmit(e) {
     e.preventDefault();
-    // alert(URL.createObjectURL(selectedImage))//new
+
     setLoading(true);
 
     resetForm();
 
     if (images.length > 6) {
       setLoading(false);
-      toast.error("Maximun 6 images are allowed");
+      toast.error("Máximo 6 imágenes permitidas");
       return;
     }
 
-    async function storeImage(image) {
-      return new Promise((resolve, reject) => {
-        const storage = getStorage();
-        const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
-        const storageRef = ref(storage, filename);
-        const uploadTask = uploadBytesResumable(storageRef, image);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress = Math.floor(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            // console.log("Upload is " + progress + "% done");
-            setProgress(progress);
-          },
-          (error) => {
-            // Handle unsuccessful uploads
-            reject(error);
-          },
-          () => {
-            // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              resolve(downloadURL);
-            });
-          }
-        );
-      });
+    // Guardar las imágenes en Firebase Storage
+    const imageUrls = [];
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+
+      // Generar un nombre único para cada imagen
+      const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+
+      try {
+        // Subir la imagen a Firebase Storage
+        const storageRef = ref(getStorage(), filename);
+        await uploadBytesResumable(storageRef, image);
+
+        // Obtener la URL de descarga de la imagen
+        const downloadURL = await getDownloadURL(storageRef);
+        imageUrls.push(downloadURL);
+      } catch (error) {
+        console.error("Error al subir la imagen:", error);
+      }
     }
 
-    const imgUrls = await Promise.all(
-      [...images].map((image) => storeImage(image))
-    ).catch((error) => {
-      setLoading(false);
-      toast.error("Images not uploaded");
-      return;
-    });
+    // Convertir startDate y endDate a objetos de fecha
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
 
-    const formDataCopy = {
-      ...formData,
-      imgUrls,
+    const eventDoc = {
+      name,
+      start_date: startDateObj, // Almacenar como objeto de fecha
+      end_date: endDateObj, // Almacenar como objeto de fecha
+      category,
+      latitude,
+      longitude,
+      imgUrls: imageUrls,
       geolocation,
       timestamp: serverTimestamp(),
       userRef: auth.currentUser.uid,
     };
-    delete formDataCopy.images;
-    delete formDataCopy.latitude;
-    delete formDataCopy.longitude;
-    const docRef = await addDoc(collection(db, "events"), formDataCopy);
-    setLoading(false);
-    toast.success("Ebvento agregado!");
+
+    // Guardar los datos en Firestore
+    try {
+      const docRef = await addDoc(collection(db, "events"), eventDoc);
+      toast.success("Evento agregado!");
+    } catch (error) {
+      console.error("Error al guardar el evento en Firestore:", error);
+      toast.error("Error al guardar el evento");
+    }
   }
 
   return (
-    <>
-      <div className={`modal ${isOpen ? "show-event" : ""} `}>
-        <div
-          className="modal-content-event"
-          style={{ marginTop: "40px", width: "60%" }}
-        >
-          <main>
-            <h2>Agrega un nuevo evento</h2>
-            <br />
-            <form onSubmit={onSubmit}>
-              {/* 4 column grid layout with text inputs for the first and last names */}
-              <div className="row mb-4">
-                <div className="col">
-                  <div className="form-outline">
-                    <input
-                      type="text"
-                      id="name"
-                      value={name}
-                      onChange={onChange}
-                      required
-                      className="form-control"
-                    />
-                    <label className="form-label" htmlFor="form6Example1">
-                      Nombre
-                    </label>
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="form-outline">
-                    <input
-                      type="text"
-                      id="category"
-                      value={category}
-                      onChange={onChange}
-                      required
-                      className="form-control"
-                    />
-                    <label className="form-label" htmlFor="form6Example2">
-                      Categoría
-                    </label>
-                  </div>
+    <div className={`modal ${isOpen ? "show-event" : ""} `}>
+      <div
+        className="modal-content-event"
+        style={{ marginTop: "40px", width: "60%" }}
+      >
+        <main>
+          <div className="d-flex ">
+            <span className="material-symbols-outlined">calendar_month</span>
+            <span
+              className="d-none d-sm-flex d-md-flex ps-2"
+              style={{ fontWeight: "bold" }}
+            >
+              Agregar un nuevo evento
+            </span>
+          </div>
+          <br />
+          <form onSubmit={onSubmit}>
+            <div className="row mb-4">
+              <div className="col">
+                <div className="form-outline">
+                  <input
+                    placeholder="Ingrese un nombre al evento"
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={onChange}
+                    required
+                    className="form-control"
+                  />
                 </div>
               </div>
-
-              <div className="row mb-4">
-                <div className="col">
-                  <div className="form-outline">
-                    <input
-                      type="text"
-                      id="start_date"
-                      value={start_date}
-                      onChange={onChange}
-                      required
-                      className="form-control"
-                    />
-                    <label className="form-label" htmlFor="form6Example1">
-                      Fecha inicio
-                    </label>
-                  </div>
-                </div>
-                <div className="col">
-                  <div className="form-outline">
-                    <input
-                      type="text"
-                      id="end_date"
-                      value={end_date}
-                      onChange={onChange}
-                      required
-                      className="form-control"
-                    />
-                    <label className="form-label" htmlFor="form6Example2">
-                      Fecha fin
-                    </label>
-                  </div>
+              <div className="col">
+                <div className="form-outline">
+                  <select
+                    id="category"
+                    value={category}
+                    onChange={onChange}
+                    required
+                    className="form-control"
+                  >
+                    <option value="">Selecciona una categoría</option>
+                    <option value="Lectura">Lectura</option>
+                    <option value="Fiestas">Fiestas</option>
+                    <option value="Deportes">Deportes</option>
+                    <option value="Charla">Charla</option>
+                    <option value="Comidas">Comidas</option>
+                  </select>
                 </div>
               </div>
+            </div>
 
-              <div>
-                <p className="text-lg font-semibold mb-2">
-                  Seleccione una ubicación especifica
-                </p>
-                <div id="mapid" style={{ height: "400px" }}></div>
-              </div>
-
-              <div style={{ marginTop: "20px" }}>
-                <p className="text-gray-600">
-                  Agrege una imagen la primera será la portada (max 6)
-                </p>
-                <input
-                  type="file"
-                  id="images"
-                  onChange={onChange}
-                  accept=".jpg,.png,.jpeg"
-                  multiple
-                  required
-                />
-                <div
-                  className="form-group multi-preview md:w-[100%] lg:w-[94%] mt-3  mb-12 md:mb-6"
-                  style={{ display: "flex", flexWrap: "nowrap" }}
-                >
-                  <ul className="has-scrollbar">
-                    {selectedImage &&
-                      Array.from(selectedImage).map((image, index) => (
-                        <img
-                          className="rounded-2xl"
-                          key={index}
-                          src={URL.createObjectURL(image)}
-                          alt={`Image ${index}`}
-                          style={{
-                            maxWidth: "100%",
-                            height: "220px",
-                            marginRight: "10px",
-                          }}
-                        />
-                      ))}
-                  </ul>
+            <div className="row" style={{ marginBottom: 20 }}>
+              <div className="col">
+                <div className="form-outline">
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="Time"
+                    dateFormat="yyyy/MM/dd HH:mm"
+                    className="form-control"
+                    style={{ zIndex: 1 }}
+                  />
+                  <label className="form-label" style={{ marginLeft: 10 }}>
+                    Fecha de inicio
+                  </label>
                 </div>
               </div>
-
-              {loading && (
-                <div className="mt-1 mb-1">
-                  <span className="font-bold text-cyan-700 text-lg">
-                    Subiendo... {progress}%
-                  </span>
-                  <progress
-                    className="bg-gray-300 w-full h-3 rounded-full overflow-hidden"
-                    value={progress}
-                    max="100"
-                  ></progress>
+              <div className="col">
+                <div className="form-outline">
+                  <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="Time"
+                    dateFormat="yyyy/MM/dd HH:mm"
+                    className="form-control"
+                    style={{ zIndex: 1 }}
+                  />
+                  <label className="form-label" style={{ marginLeft: 10 }}>
+                    Fecha de fin
+                  </label>
                 </div>
-              )}
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                style={{
-                  padding: 15,
-                  marginBottom: "40px",
-                  width: "300px",
-                  background: "black",
-                  color: "white",
-                }}
+            <div>
+              <p className="text-lg font-semibold mb-2">
+                Selecciona una ubicación específica
+              </p>
+              <div id="mapid" style={{ height: "400px", zIndex: 0 }}></div>
+            </div>
+
+            <div style={{ marginTop: "20px" }}>
+              <p className="text-gray-600">
+                Agrega una imagen, la primera será la portada (máx. 6)
+              </p>
+              <input
+                type="file"
+                id="images"
+                onChange={onChange}
+                accept=".jpg,.png,.jpeg"
+                multiple
+                required
+              />
+              <div
+                className="form-group multi-preview md:w-[100%] lg:w-[94%] mt-3 mb-12 md:mb-6"
+                style={{ display: "flex", flexWrap: "nowrap" }}
               >
-                Guardar
-              </button>
-            </form>
-          </main>
-          {/* <button onClick={closeModal} className="close-button">
-            <span className="material-symbols-outlined">close</span>
-          </button> */}
-        </div>
+                <ul className="has-scrollbar">
+                  {selectedImage &&
+                    Array.from(selectedImage).map((image, index) => (
+                      <img
+                        className="rounded-2xl"
+                        key={index}
+                        src={URL.createObjectURL(image)}
+                        alt={`Image ${index}`}
+                        style={{
+                          maxWidth: "100%",
+                          height: "220px",
+                          marginRight: "10px",
+                        }}
+                      />
+                    ))}
+                </ul>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              style={{
+                padding: 8,
+                marginBottom: "40px",
+                width: "300px",
+                background: "black",
+                color: "white",
+              }}
+            >
+              Guardar
+            </button>
+          </form>
+        </main>
       </div>
-    </>
+    </div>
   );
 }
