@@ -3,6 +3,7 @@ import MapView from "../components/MapView";
 import Navbar from "../components/Navbar";
 import ProfileModal from "../components/ProfileModal";
 import { useState } from "react";
+import Footer from "./Footer";
 
 export default function Home() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function Home() {
       <ProfileModal show={isProfileModalOpen} onClose={closeProfileModal} />
       <Filters />
       <MapView />
+      <Footer />
     </>
   );
 }
