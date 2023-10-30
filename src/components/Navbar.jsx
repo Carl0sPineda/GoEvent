@@ -1,16 +1,7 @@
-import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import CreateEvents from "../pages/CreateEvents";
 
 const Navbar = ({ onProfileClick }) => {
-  const auth = getAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(auth.currentUser);
-  }, [auth]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -61,22 +52,17 @@ const Navbar = ({ onProfileClick }) => {
                   </span>
                 </button>
 
-                {/* <button
+                <button
                   type="button"
                   className="ct-btn-primary d-flex  justify-content-center align-items-center ct-btn ms-4"
-                  onClick={() => navigate("/Profile")}
+                  onClick={onProfileClick}
                 >
+                  <span className="material-symbols-outlined">
+                    account_circle
+                  </span>
                   <span className="d-none d-sm-flex d-md-flex ps-2">
                     Perfil
                   </span>
-                 
-                </button> */}
-
-                <button
-                  className="ct-btn-primary ms-2"
-                  onClick={onProfileClick}
-                >
-                  Perfil
                 </button>
               </div>
             </div>
