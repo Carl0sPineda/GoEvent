@@ -36,6 +36,8 @@ const ProfileModal = ({ show, onClose }) => {
             ...formData, // Mantén los valores actuales
             ...userData, // Actualiza con los datos del usuario
           });
+
+          // console.log("Additional User Data:", userData.phone);
         } else {
           console.log("User data not found in Firestore");
         }
