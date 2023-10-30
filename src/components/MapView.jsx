@@ -19,7 +19,6 @@ const MapView = () => {
       });
 
       setData(updatedData);
-      console.log(updatedData);
     });
 
     // Al salir del componente, detener la escucha
@@ -33,18 +32,7 @@ const MapView = () => {
         <Marker key={e.id} position={[e.geolocation.lat, e.geolocation.lng]}>
           <Popup>
             <div>
-              <h5
-                style={{
-                  position: "absolute",
-                  bottom: "0",
-                  backgroundColor: "white", // Fondo blanco para que sea legible
-                  padding: "5px",
-                  boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)", // Sombra para resaltar el texto
-                  zIndex: 1, // Asegura que el texto esté sobre la imagen
-                }}
-              >
-                {e.name}
-              </h5>
+              <h5>{e.name}</h5>
               <img src={e.imgUrls} height={150} width={300} alt="evento.jpg" />
             </div>
           </Popup>
