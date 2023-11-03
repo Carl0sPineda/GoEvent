@@ -19,14 +19,13 @@ export default function Profile() {
     photo: {},
     location: "",
     password: "",
-    interests: []
+    interests: [],
   });
   const [NewInterests, setNewInterests] = useState([]);
   // const [AllInterest, setAllInterest] = useState([]);
-  const { name, email, phone,photo, imgUrls, location , interests} = formData;
+  const { name, email, phone, photo, imgUrls, location, interests } = formData;
   const auth = getAuth();
   const navigate = useNavigate();
-
 
   useEffect(() => {
     async function fetchUserData() {
@@ -36,7 +35,7 @@ export default function Profile() {
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
 
-          setFormData({...userData});
+          setFormData({ ...userData });
 
           // Now you can access additional user data from `userData` object
           // console.log("Additional User Data:", userData.phone);
@@ -52,8 +51,7 @@ export default function Profile() {
     fetchUserData();
   }, []);
 
-
-  function onChange(e){
+  function onChange(e) {
     let boolean = null;
 
     if (e.target.value === "true") {
@@ -85,23 +83,20 @@ export default function Profile() {
   }
 
   const handleSelectChange = (event) => {
-
     const selectedOptions = Array.from(
       event.target.selectedOptions,
       (option) => option.value
     );
-  
+
     // Crear una copia de los intereses existentes en formData
     const updatedInterests = [...interests, ...selectedOptions];
-  
+
     // Actualizar formData con los nuevos intereses
     setFormData({ ...formData, interests: updatedInterests });
-  
+
     // Actualizar NewInterests para reflejar los cambios
     setNewInterests(updatedInterests);
-  }
-  
-
+  };
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -142,17 +137,14 @@ export default function Profile() {
       //   return;
       // });
 
-     
-        if (photo) {
-          const imgUrls = await Promise.all(
-            [...photo].map((image) => storeFile(image))
-          );
-        }else{
-          const imgUrls = photo
-        }
+      if (photo) {
+        const imgUrls = await Promise.all(
+          [...photo].map((image) => storeFile(image))
+        );
+      } else {
+        const imgUrls = photo;
+      }
 
-
-     
       // const userCredentials = await createUserWithEmailAndPassword(
       //   auth,
       //   email,
@@ -164,17 +156,15 @@ export default function Profile() {
       // });
 
       // const user = userCredentials.user;
-    
-      const formDataCopy = { ...formData,imgUrls };
+
+      const formDataCopy = { ...formData, imgUrls };
       delete formDataCopy.photo;
       delete formDataCopy.password;
-    
 
-      const docRef= doc(db,"users",auth?.currentUser?.uid);
-      await updateDoc(docRef,formDataCopy);
+      const docRef = doc(db, "users", auth?.currentUser?.uid);
+      await updateDoc(docRef, formDataCopy);
       navigate("/home");
       toast.success("Datos Editados!!!");
-    
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         toast.error("Ese email ya esta en uso");
@@ -189,145 +179,141 @@ export default function Profile() {
 
   return (
     <>
-    <button type="button" className="ct-btn-primary"
-    onClick={()=> navigate("/home")}
-    >Regresar</button>
-<section>
-      <div className="container-fluid vh-100 bg-white d-flex justify-content-center align-items-center">
-        <div className="container-principal row row-cols-1 row-cols-md-2">
-
-        <div class="col container-nueva-columna modal-with-background">
-       
-        <div className="text-center text-white">
-            <img className="imgP mt-4" src={imgUrls} alt="" />
-            <div className="mt-3">
-            <p style={{ fontWeight: 'bold' }}>{name}</p>
-            </div>
-            <div className='mt-4'>
-            <p style={{ fontWeight: 'bold' }}>Intereses</p>
-            {interests.map((interest, index) => (
-              <span className='d-block' key={index}>{interest}</span>
-             ))}
-            
-            </div>
-            
-            </div>
-        </div>
-          <div className="col container-formulario">
-            {/* <!-- TITULO Y LOGO --> */}
-            <div className="row justify-content-center align-items-lg-center p-2">
-              {/* <h4 className="text-align-center mt-2">Crea tu cuenta</h4> */}
-            </div>
-            {/* <!-- FORMULARIO --> */}
-            <div className="row p-2">
-              <div>
-                <div className="text-center">
-                  <labael>Editar Mi Perfil</labael>
+      <button
+        type="button"
+        className="ct-btn-primary"
+        onClick={() => navigate("/home")}
+      >
+        Regresar
+      </button>
+      <section>
+        <div className="container-fluid vh-100 bg-white d-flex justify-content-center align-items-center">
+          <div className="container-principal row row-cols-1 row-cols-md-2">
+            <div class="col container-nueva-columna modal-with-background">
+              <div className="text-center text-white">
+                <img className="imgP mt-4" src={imgUrls} alt="" />
+                <div className="mt-3">
+                  <p style={{ fontWeight: "bold" }}>{name}</p>
+                </div>
+                <div className="mt-4">
+                  <p style={{ fontWeight: "bold" }}>Intereses</p>
+                  {interests.map((interest, index) => (
+                    <span className="d-block" key={index}>
+                      {interest}
+                    </span>
+                  ))}
                 </div>
               </div>
-
-              <form onSubmit={onSubmit} className="mt-2">
-                <div className="mb-3">
-                  {/* <label htmlFor="email" className="">Nombre Completo</label> */}
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={onChange}
-                    required
-                    placeholder="Nombre Completo"
-                    className="form-control"
-                  />
+            </div>
+            <div className="col container-formulario">
+              {/* <!-- TITULO Y LOGO --> */}
+              <div className="row justify-content-center align-items-lg-center p-2">
+                {/* <h4 className="text-align-center mt-2">Crea tu cuenta</h4> */}
+              </div>
+              {/* <!-- FORMULARIO --> */}
+              <div className="row p-2">
+                <div>
+                  <div className="text-center">
+                    <labael>Editar Mi Perfil</labael>
+                  </div>
                 </div>
 
-                
-                <div className="mb-3">
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={onChange}
-                    required
-                    placeholder="Correo electronico"
-                    className="form-control"
-                  />
-                </div>
+                <form onSubmit={onSubmit} className="mt-2">
+                  <div className="mb-3">
+                    {/* <label htmlFor="email" className="">Nombre Completo</label> */}
+                    <input
+                      type="text"
+                      id="name"
+                      value={name}
+                      onChange={onChange}
+                      required
+                      placeholder="Nombre Completo"
+                      className="form-control"
+                    />
+                  </div>
 
-                <div className="mb-3">
-                  <input
-                    type="number"
-                    id="phone"
-                    value={phone}
-                    onChange={onChange}
-                    required
-                    placeholder="Telefono"
-                    className="form-control"
-                  />
-                </div>
+                  <div className="mb-3">
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={onChange}
+                      required
+                      placeholder="Correo electronico"
+                      className="form-control"
+                    />
+                  </div>
 
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    id="location"
-                    value={location}
-                    onChange={onChange}
-                    required
-                    placeholder="Ubicación"
-                    className="form-control"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label>Intereses</label>
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    id="interests"
-                    value={interests}
-                    onChange={handleSelectChange}
-                    required
-                  >
-                    <option>Seleccione</option>
-                    <option value="Lectura">Lectura</option>
-                    <option value="Fiestas">Fiestas</option>
-                    <option value="Deportes">Deportes</option>
-                    <option value="Charla">Charla</option>
-                    <option value="Comida">Comida</option>
-                  </select>
-                </div>
+                  <div className="mb-3">
+                    <input
+                      type="number"
+                      id="phone"
+                      value={phone}
+                      onChange={onChange}
+                      required
+                      placeholder="Telefono"
+                      className="form-control"
+                    />
+                  </div>
 
-                 <div>
-                  {interests.map((option) => (
-                    <ul key={option}>
-                      {option} <span>&#10003;</span>
-                    </ul>
-                  ))}
-                </div> 
-                <div className="mb-3">
-                  <label>Foto de perfil</label>
-                  <input
-                    type="file"
-                    id="photo"
-                    onChange={onChange}
-                    
-                    className="form-control"
-                  />
-                </div>
+                  <div className="mb-3">
+                    <input
+                      type="text"
+                      id="location"
+                      value={location}
+                      onChange={onChange}
+                      required
+                      placeholder="Ubicación"
+                      className="form-control"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label>Intereses</label>
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      id="interests"
+                      value={interests}
+                      onChange={handleSelectChange}
+                      required
+                    >
+                      <option>Seleccione</option>
+                      <option value="Lectura">Lectura</option>
+                      <option value="Fiestas">Fiestas</option>
+                      <option value="Deportes">Deportes</option>
+                      <option value="Charla">Charla</option>
+                      <option value="Comida">Comida</option>
+                    </select>
+                  </div>
 
-                <div className="d-grid">
-                  <button type="submit" className="ct-btn-primary">
-                    Registrarse
-                  </button>
-                </div>
-              </form>
+                  <div>
+                    {interests.map((option) => (
+                      <ul key={option}>
+                        {option} <span>&#10003;</span>
+                      </ul>
+                    ))}
+                  </div>
+                  <div className="mb-3">
+                    <label>Foto de perfil</label>
+                    <input
+                      type="file"
+                      id="photo"
+                      onChange={onChange}
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="d-grid">
+                    <button type="submit" className="ct-btn-primary">
+                      Editar
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-
         </div>
-      </div>
-      
-</section>
-
-
+      </section>
     </>
   );
 }
