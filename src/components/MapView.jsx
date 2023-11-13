@@ -18,7 +18,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { Modal, Button } from "react-bootstrap";
 
-const MapView = () => {
+const MapView = ({ selectedFilters })  => {
   const auth = getAuth();
   const [data, setData] = useState([]);
   const [userId, setUserId] = useState(null);
@@ -179,10 +179,15 @@ const MapView = () => {
     }
   };
 
+  const filteredEvents = selectedFilters.length > 0
+  ? data.filter(e => selectedFilters.includes(e.category))
+  : data;
+
   return (
     <MapContainer className="render" center={[10.46701, -84.96775]} zoom={9}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {data.map((e) => (
+      
+     {filteredEvents.map((e) => (
         <Marker
           key={e.id}
           position={[e.geolocation.lat, e.geolocation.lng]}
@@ -293,7 +298,8 @@ const MapView = () => {
             </Modal>
           </Popup>
         </Marker>
-      ))}
+           ))}
+    
     </MapContainer>
   );
 };

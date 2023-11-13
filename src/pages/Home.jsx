@@ -7,7 +7,7 @@ import Footer from "./Footer";
 
 export default function Home() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-
+  const [selectedFilters, setSelectedFilters] = useState([]);
   const handleProfileClick = () => {
     setIsProfileModalOpen(true);
   };
@@ -19,8 +19,8 @@ export default function Home() {
     <>
       <Navbar onProfileClick={handleProfileClick} />
       <ProfileModal show={isProfileModalOpen} onClose={closeProfileModal} />
-      <Filters />
-      <MapView />
+      <Filters setSelectedFilters={setSelectedFilters} />
+      <MapView selectedFilters={selectedFilters} />
       <Footer />
     </>
   );

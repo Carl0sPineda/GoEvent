@@ -1,24 +1,34 @@
-const Filters = () => {
+const Filters = ({ setSelectedFilters }) => {
+  const handleFilterClick = (category) => {
+    setSelectedFilters((prevFilters) =>
+      prevFilters.includes(category)
+        ? prevFilters.filter((filter) => filter !== category)
+        : [...prevFilters, category]
+    );
+  };
+
   return (
     <>
       {/* FILTRO */}
       <section className="row flex-wrap p-4 justify-content-evenly justify-content-lg-center">
         <div className=" col-1 col-md-1 col-lg-2 col-xl-1  d-flex  justify-content-center align-content-center align-items-center">
-          <button
-            type="button"
-            className="ct-btn-secundary align-items-center d-flex "
-          >
-            <span className="material-symbols-outlined pe-0 pe-md-2 ">
+      <button
+      type="button"
+      className="ct-btn-secundary align-items-center d-flex"
+      onClick={() => handleFilterClick('Lectura')}
+      >
+        <span className="material-symbols-outlined pe-0 pe-md-2 ">
               book
-            </span>
+        </span>
             <span className="d-none d-md-block">Lectura</span>
-            {/*- Crear evento  */}
-          </button>
+     </button>
+          
         </div>
         <div className="col-1 col-md-1 col-lg-2 col-xl-1  d-flex  justify-content-center align-content-center align-items-center   ">
           <button
             type="button"
             className="ct-btn-secundary align-items-center d-flex"
+            onClick={() => handleFilterClick('Deportes')}
           >
             <span className="material-symbols-outlined pe-0 pe-md-2">
               sports_soccer
@@ -31,6 +41,7 @@ const Filters = () => {
           <button
             type="button"
             className="ct-btn-secundary align-items-center d-flex"
+            onClick={() => handleFilterClick('Fiestas')}
           >
             <span className="material-symbols-outlined pe-0 pe-md-2">
               celebration
@@ -44,11 +55,12 @@ const Filters = () => {
           <button
             type="button"
             className="ct-btn-secundary align-items-center d-flex"
+            onClick={() => handleFilterClick('Comidas')}
           >
             <span className="material-symbols-outlined pe-0 pe-md-2">
               restaurant
             </span>
-            <span className="d-none d-md-block">Comida</span>
+            <span className="d-none d-md-block">Comidas</span>
             {/*- Crear evento  */}
           </button>
         </div>
@@ -57,6 +69,7 @@ const Filters = () => {
           <button
             type="button"
             className="ct-btn-secundary align-items-center d-flex"
+            onClick={() => handleFilterClick('Charla')}
           >
             <span className="material-symbols-outlined pe-0 pe-md-2">
               partner_exchange
