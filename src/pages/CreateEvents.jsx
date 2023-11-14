@@ -129,7 +129,7 @@ export default function CreateEvents({ isOpen, closeModal }) {
 
     L.control
       .fullscreen({
-        position: "topleft",
+        position: "topright",
       })
       .addTo(map);
 

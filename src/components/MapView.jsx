@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import {
   collection,
   onSnapshot,
@@ -12,13 +12,18 @@ import {
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import L from "leaflet";
-import green from "../assets/green.svg";
-import red from "../assets/red.svg";
+import green_dep from "../assets/green_dep.svg";
+import red_com from "../assets/red_com.svg";
+import blue_lec from "../assets/blue_lec.svg";
+import yellow_par from "../assets/yellow_par.svg";
+import black_char from "../assets/black_char.svg";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { Modal, Button } from "react-bootstrap";
+import "leaflet-control-geocoder/dist/Control.Geocoder.css";
+import "leaflet-control-geocoder";
 
-const MapView = ({ selectedFilters })  => {
+const MapView = ({ selectedFilters }) => {
   const auth = getAuth();
   const [data, setData] = useState([]);
   const [userId, setUserId] = useState(null);
@@ -81,6 +86,55 @@ const MapView = ({ selectedFilters })  => {
     };
   }, [userId]);
 
+  const GeocoderControl = ({ map }) => {
+    useEffect(() => {
+      if (!map) return;
+
+      const geocoder = L.Control.Geocoder.nominatim();
+      const control = L.Control.geocoder({
+        geocoder: geocoder,
+      });
+
+      control.addTo(map);
+
+      map.on("geocode:result", (event) => {
+        const { center, bounds } = event.geocode || {};
+
+        if (center) {
+          map.setView(center, 16); // Set the map view to the location with zoom level 10
+        } else if (bounds) {
+          map.fitBounds(bounds);
+        }
+      });
+
+      return () => {
+        map.removeControl(control);
+      };
+    }, [map]);
+
+    return null;
+  };
+
+  const CustomGeocoderControl = () => {
+    const map = useMap();
+    return <GeocoderControl map={map} />;
+  };
+
+  const CustomZoomControl = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      const zoomControl = L.control.zoom({ position: "topright" });
+      zoomControl.addTo(map);
+
+      return () => {
+        map.removeControl(zoomControl);
+      };
+    }, [map]);
+
+    return null;
+  };
+
   const formatDate = (date) => {
     return date.toLocaleString(undefined, {
       year: "numeric",
@@ -91,20 +145,20 @@ const MapView = ({ selectedFilters })  => {
     });
   };
 
-  const isEventNear = (event) => {
-    const now = new Date();
-    const timeDifference = event.start_date.toDate() - now;
-    const hoursUntilEvent = timeDifference / (1000 * 60 * 60);
-    const hoursThreshold = 24;
+  // const isEventNear = (event) => {
+  //   const now = new Date();
+  //   const timeDifference = event.start_date.toDate() - now;
+  //   const hoursUntilEvent = timeDifference / (1000 * 60 * 60);
+  //   const hoursThreshold = 24;
 
-    if (hoursUntilEvent < 0) {
-      return false;
-    } else if (hoursUntilEvent <= hoursThreshold) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  //   if (hoursUntilEvent < 0) {
+  //     return false;
+  //   } else if (hoursUntilEvent <= hoursThreshold) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   const getAttendeeData = async (eventId) => {
     try {
@@ -179,33 +233,123 @@ const MapView = ({ selectedFilters })  => {
     }
   };
 
-  const filteredEvents = selectedFilters.length > 0
-  ? data.filter(e => selectedFilters.includes(e.category))
-  : data;
+  const legendStyle = {
+    position: "absolute",
+    bottom: "20px",
+    left: "20px",
+    backgroundColor: "white",
+    padding: "10px",
+    borderRadius: "5px",
+    zIndex: 1000,
+    width: 100,
+    boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.2)",
+  };
+
+  const filteredEvents =
+    selectedFilters.length > 0
+      ? data.filter((e) => selectedFilters.includes(e.category))
+      : data;
 
   return (
     <MapContainer className="render" center={[10.46701, -84.96775]} zoom={9}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      
-     {filteredEvents.map((e) => (
+      <CustomGeocoderControl />
+      <CustomZoomControl />
+
+      <div style={legendStyle}>
+        <div style={{ marginBottom: "5px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                backgroundColor: "blue",
+                marginRight: "5px",
+                zIndex: 1000,
+              }}
+            ></div>
+            <span style={{ zIndex: 1000 }}>Lectura </span>
+          </div>
+        </div>
+        <div style={{ marginBottom: "5px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                backgroundColor: "green",
+                marginRight: "5px",
+                zIndex: 1000,
+              }}
+            ></div>
+            <span style={{ zIndex: 1000 }}>Deportes </span>
+          </div>
+        </div>
+        <div style={{ marginBottom: "5px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                backgroundColor: "yellow",
+                marginRight: "5px",
+                zIndex: 1000,
+              }}
+            ></div>
+            <span style={{ zIndex: 1000 }}>Fiestas</span>
+          </div>
+        </div>
+        <div style={{ marginBottom: "5px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                backgroundColor: "red",
+                marginRight: "5px",
+                zIndex: 1000,
+              }}
+            ></div>
+            <span style={{ zIndex: 1000 }}>Comidas</span>
+          </div>
+        </div>
+        <div style={{ marginBottom: "5px" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                width: "12px",
+                height: "12px",
+                backgroundColor: "black",
+                marginRight: "5px",
+                zIndex: 1000,
+              }}
+            ></div>
+            <span style={{ zIndex: 1000 }}>Charla</span>
+          </div>
+        </div>
+      </div>
+
+      {filteredEvents.map((e) => (
         <Marker
           key={e.id}
           position={[e.geolocation.lat, e.geolocation.lng]}
-          icon={
-            isEventNear(e)
-              ? L.icon({
-                  iconUrl: green,
-                  iconSize: [40, 40],
-                  iconAnchor: [20, 40],
-                  popupAnchor: [0, -40],
-                })
-              : L.icon({
-                  iconUrl: red,
-                  iconSize: [40, 40],
-                  iconAnchor: [20, 40],
-                  popupAnchor: [0, -40],
-                })
-          }
+          icon={L.icon({
+            iconUrl:
+              e.category === "Lectura"
+                ? blue_lec
+                : e.category === "Deportes"
+                ? green_dep
+                : e.category === "Fiestas"
+                ? yellow_par
+                : e.category === "Comidas"
+                ? red_com
+                : e.category === "Charla"
+                ? black_char
+                : null, // Add more categories as needed
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40],
+          })}
         >
           <Popup>
             <h5>{e.name}</h5>
@@ -298,8 +442,7 @@ const MapView = ({ selectedFilters })  => {
             </Modal>
           </Popup>
         </Marker>
-           ))}
-    
+      ))}
     </MapContainer>
   );
 };

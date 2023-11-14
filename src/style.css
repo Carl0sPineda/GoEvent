@@ -18,6 +18,11 @@
   box-sizing: border-box;
   margin: 0;
 }
+
+.leaflet-left{
+  display: none;
+}
+
 body {
   background-color: var(--color-fondo);
   font-family: "Roboto", sans-serif;
