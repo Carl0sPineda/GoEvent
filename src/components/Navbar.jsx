@@ -1,8 +1,9 @@
 import { useState } from "react";
 import CreateEvents from "../pages/CreateEvents";
 
-const Navbar = ({ onProfileClick }) => {
+const Navbar = ({ onProfileClick, onSearchChange}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -11,7 +12,12 @@ const Navbar = ({ onProfileClick }) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    onSearchChange(value);
 
+  };
   return (
     <>
       {/** NAV-BAR */}
@@ -25,16 +31,18 @@ const Navbar = ({ onProfileClick }) => {
             </a>
           </div>
           {/* BUSCADOR */}
-          {/* <div className="col-10 col-md-4 pe-2 ps-2">
+          <div className="col-10 col-md-4 pe-2 ps-2">
             <form className="d-flex" role="search">
               <input
                 className="form-control color-border me-2 ct-center"
                 type="search"
                 placeholder="Buscar un evento"
                 aria-label="Search"
+                value={searchTerm}
+                onChange={handleSearchChange}
               />
             </form>
-          </div> */}
+          </div>
           {/* OPCIONES */}
           <div className="col">
             <div className="d-flex pt-0 pt-sm-2 pt-md-0 pe-0 pe-sm-2 pe-md-0">

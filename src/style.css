@@ -38,9 +38,8 @@ body {
 
   background-size: cover;
   background-position: center;
-  height: calc(100%); /* Ajusta la altura según tus necesidades */
-  width: calc(100%); /* Ajusta la altura según tus necesidades */
-
+  height: calc(100%);
+  width: calc(100%); 
   padding: 0px;
 }
 .container-imagen {
@@ -67,6 +66,8 @@ button:hover {
 
 .container-formulario {
   background-color: rgb(255, 255, 255);
+  max-height: 100%; /* Establece la altura máxima al 100% del contenedor principal */
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical si es necesario */
 }
 
 .text-align-center {
@@ -188,7 +189,7 @@ button:hover {
 }
 
 .modal-with-background {
-  background-image: url("https://images.unsplash.com/photo-1542289436-84a4d3ea5b8c?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-image: url("https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
   background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
   background-position: center center; /* Centra la imagen horizontal y verticalmente */
 }
@@ -200,6 +201,8 @@ button:hover {
 @media (max-width: 576px) {
   .container-imagen {
     display: none;
+    max-height: 100%; /* Establece la altura máxima al 100% del contenedor principal */
+  overflow: hidden; 
   }
   .checkbox .toggle {
     width: 10.5rem;

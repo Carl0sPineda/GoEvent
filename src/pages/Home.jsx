@@ -8,6 +8,8 @@ import Footer from "./Footer";
 export default function Home() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
   const handleProfileClick = () => {
     setIsProfileModalOpen(true);
   };
@@ -15,12 +17,16 @@ export default function Home() {
   const closeProfileModal = () => {
     setIsProfileModalOpen(false);
   };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
   return (
     <>
-      <Navbar onProfileClick={handleProfileClick} />
+      <Navbar onProfileClick={handleProfileClick} searchTerm={searchTerm} onSearchChange={handleSearchChange}/>
       <ProfileModal show={isProfileModalOpen} onClose={closeProfileModal} />
       <Filters setSelectedFilters={setSelectedFilters} />
-      <MapView selectedFilters={selectedFilters} />
+      <MapView selectedFilters={selectedFilters} searchTerm={searchTerm} />
       <Footer />
     </>
   );

@@ -23,7 +23,7 @@ import { Modal, Button } from "react-bootstrap";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
 import "leaflet-control-geocoder";
 
-const MapView = ({ selectedFilters }) => {
+const MapView = ({ selectedFilters,searchTerm }) => {
   const auth = getAuth();
   const [data, setData] = useState([]);
   const [userId, setUserId] = useState(null);
@@ -33,9 +33,13 @@ const MapView = ({ selectedFilters }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  useEffect(() => {
-    const collectionRef = collection(db, "events");
 
+
+
+  useEffect(() => {    
+   
+    // console.log(auth.currentUser)
+    const collectionRef = collection(db, "events");
     const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
       const updatedData = [];
       querySnapshot.forEach((doc) => {
@@ -43,6 +47,7 @@ const MapView = ({ selectedFilters }) => {
         updatedData.push(e);
       });
       setData(updatedData);
+      
     });
 
     const authUnsubscribe = auth.onAuthStateChanged((user) => {
@@ -245,10 +250,28 @@ const MapView = ({ selectedFilters }) => {
     boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.2)",
   };
 
-  const filteredEvents =
-    selectedFilters.length > 0
-      ? data.filter((e) => selectedFilters.includes(e.category))
+  // const filteredEvents =
+  //   selectedFilters.length > 0
+  //     ? data.filter((e) => selectedFilters.includes(e.category))
+  //     : data;
+
+  const filterByCategoryAndSearch = () => {
+    // Filtrar por categoría
+    const filteredByCategory = selectedFilters.length > 0
+      ? data.filter(e => selectedFilters.includes(e.category))
       : data;
+  
+    // Filtrar por término de búsqueda
+    const filteredBySearch = searchTerm
+      ? filteredByCategory.filter((e) =>
+          e.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : filteredByCategory;
+  
+    return filteredBySearch;
+  };
+  
+  const filteredEvents = filterByCategoryAndSearch();
 
   return (
     <MapContainer className="render" center={[10.46701, -84.96775]} zoom={9}>
@@ -413,7 +436,7 @@ const MapView = ({ selectedFilters }) => {
               </p>
             ) : (
               <p style={{ position: "absolute", top: 0, right: 40 }}>
-                Asistentes 0
+                {/* Asistentes 0 */}
               </p>
             )}
             <Modal

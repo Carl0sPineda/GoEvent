@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
-
 export default function SingIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,8 +27,8 @@ export default function SingIn() {
       );
       if (userCredentials.user) {
         navigate("/Home");
-        console.log("login exitoso");
-        console.log(auth.currentUser);
+        // console.log("login exitoso");
+        // console.log(auth.currentUser);
         toast.success("Login realizado con éxito!!");
       }
     } catch (error) {
@@ -52,7 +51,8 @@ export default function SingIn() {
           <div className="col container-formulario">
             {/* <!-- TITULO Y LOGO --> */}
             <div className="row justify-content-center align-items-lg-center p-2">
-              <h3 className="text-align-center" style={{ marginTop: 100 }}>
+              <img src="src/assets/goeventlogo.png" alt="" style={{width: 180}}/>
+              <h3 className="text-align-center">
                 Go event
               </h3>
             </div>

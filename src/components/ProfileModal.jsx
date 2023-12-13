@@ -77,13 +77,13 @@ const ProfileModal = ({ show, onClose }) => {
               <p style={{ fontWeight: "bold" }}>{name}</p>
             </div>
             <div className="mt-3">
-              <p>{email}</p>
+              <p style={{ fontWeight: "bold" }}>{email}</p>
             </div>
             <div className="mt-3">
-              <p>{phone}</p>
+              <p style={{ fontWeight: "bold" }}>{phone}</p>
             </div>
             <div className="mt-3">
-              <p>{location}</p>
+              <p style={{ fontWeight: "bold" }}>{location}</p>
             </div>
             <div className="mt-4">
               <p style={{ fontWeight: "bold" }}>Intereses</p>
